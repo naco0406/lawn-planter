@@ -19,16 +19,6 @@ export const authOptions: AuthOptions = {
         maxAge: 30 * 24 * 60 * 60, // 30일
     },
     callbacks: {
-        // async jwt({ token, account }) {
-        //     if (account) {
-        //         token.accessToken = account.access_token
-        //     }
-        //     return token
-        // },
-        // async session({ session, token }: { session: any; token: any }) {
-        //     session.accessToken = token.accessToken
-        //     return session
-        // },
         async jwt({ token, account, user }) {
             // 초기 로그인 시
             if (account && user) {
