@@ -229,7 +229,7 @@ export default function Home() {
       <CreateRepoModal
         isOpen={showModal}
         onConfirm={handleCreateRepo}
-        onCancel={() => setShowModal(false)}
+        onOpenChange={() => setShowModal(false)}
       />
     </main>
   )

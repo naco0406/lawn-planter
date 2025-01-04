@@ -10,6 +10,7 @@ export const authOptions: AuthOptions = {
             authorization: {
                 params: {
                     scope: 'repo user',
+                    prompt: 'select_account'
                 },
             },
         }),

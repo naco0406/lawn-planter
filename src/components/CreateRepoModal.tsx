@@ -1,37 +1,88 @@
-// src/components/CreateRepoModal.tsx
 'use client'
 
+import { useState } from 'react'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import { AlertCircle } from 'lucide-react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+
 interface CreateRepoModalProps {
-  isOpen: boolean;
-  onConfirm: () => void;
-  onCancel: () => void;
+  isOpen: boolean
+  onOpenChange: (open: boolean) => void
+  onConfirm: () => void
 }
 
-export default function CreateRepoModal({ isOpen, onConfirm, onCancel }: CreateRepoModalProps) {
-  if (!isOpen) return null;
+export default function CreateRepoModal({ 
+  isOpen, 
+  onOpenChange,
+  onConfirm 
+}: CreateRepoModalProps) {
+  const [repoName, setRepoName] = useState('lawn-diary')
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleConfirm = async () => {
+    try {
+      setIsLoading(true)
+      await onConfirm()
+      onOpenChange(false)
+    } catch (error) {
+      console.error('Failed to create repository:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg p-6 w-96">
-        <h2 className="text-xl font-bold mb-4">저장소 생성</h2>
-        <p className="mb-6 text-gray-600">
-          'lawn-diary' 저장소를 생성합니다. 이 저장소는 마크다운 형식의 일기를 저장하고 잔디를 심는 데 사용됩니다.
-        </p>
-        <div className="flex justify-end gap-4">
-          <button
-            onClick={onCancel}
-            className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded"
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle className="text-xl">저장소 생성</DialogTitle>
+          <DialogDescription className="text-gray-600">
+            마크다운 형식의 일기를 저장하고 잔디를 심는 데 사용되는 저장소를 생성합니다.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="grid gap-4 py-4">
+          <div className="grid gap-2">
+            <Label htmlFor="repoName">저장소 이름</Label>
+            <Input
+              id="repoName"
+              value={repoName}
+              onChange={(e) => setRepoName(e.target.value)}
+              placeholder="lawn-diary"
+              className="w-full"
+              disabled
+              readOnly
+            />
+          </div>
+
+          <Alert variant="default" className="bg-blue-50">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              생성된 저장소는 GitHub에서 공개적으로 접근 가능합니다.
+            </AlertDescription>
+          </Alert>
+        </div>
+
+        <DialogFooter>
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={isLoading}
           >
             취소
-          </button>
-          <button
-            onClick={onConfirm}
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          </Button>
+          <Button
+            onClick={handleConfirm}
+            disabled={!repoName.trim() || isLoading}
+            className="bg-green-600 hover:bg-green-700"
           >
-            생성하기
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+            {isLoading ? '생성 중...' : '생성하기'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
 }

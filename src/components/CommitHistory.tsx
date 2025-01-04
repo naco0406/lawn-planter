@@ -99,7 +99,7 @@ const CommitHistory = ({ accessToken }: CommitHistoryProps) => {
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <ScrollArea className="h-[400px] pr-4">
+                    <ScrollArea className="max-h-[400px] pr-4">
                         <motion.div
                             variants={container}
                             initial="hidden"
