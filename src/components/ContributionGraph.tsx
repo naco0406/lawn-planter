@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { BarChart3 } from "lucide-react";
+import { BarChart3, Calendar } from "lucide-react";
 import type {
     ContributionGraphProps,
     GitHubGraphQLResponse,
@@ -15,6 +15,7 @@ import type {
     ContributionWeek,
     GitHubAPIError
 } from '../types/github';
+import { Separator } from './ui/separator';
 
 const ContributionGraph: React.FC<ContributionGraphProps> = ({ accessToken }) => {
     // 현재 날짜 정보를 동적으로 가져오기
@@ -194,10 +195,10 @@ const ContributionGraph: React.FC<ContributionGraphProps> = ({ accessToken }) =>
         filledGrid.forEach((week, weekIndex) => {
             week.contributionDays.forEach(day => {
                 if (!day.isValid) return;
-                
+
                 const date = new Date(day.date);
                 const month = date.getMonth();
-                
+
                 // 새로운 월의 시작을 감지
                 if (month !== currentMonth) {
                     months.push({
@@ -238,37 +239,69 @@ const ContributionGraph: React.FC<ContributionGraphProps> = ({ accessToken }) =>
 
     return (
         <Card className="w-full">
-            <CardHeader className="space-y-4">
-                <div className="flex justify-between items-center">
-                    <CardTitle className="text-2xl font-bold">GitHub Contributions</CardTitle>
-                    <div className="flex items-center gap-2">
-                        <BarChart3 className="h-5 w-5 text-muted-foreground" />
+            <CardHeader className="space-y-6">
+                {/* Title and Total Contributions */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div className="space-y-1">
+                        <CardTitle className="text-2xl font-bold flex items-center gap-2">
+                            <Calendar className="h-6 w-6 text-emerald-500" />
+                            GitHub Contributions
+                        </CardTitle>
+                        <p className="text-sm text-muted-foreground">
+                            나의 GitHub 활동 기록을 확인해보세요
+                        </p>
+                    </div>
+                    <div className="flex items-center gap-2 px-4 py-2 bg-muted rounded-lg">
+                        <BarChart3 className="h-5 w-5 text-emerald-500" />
                         <span className="text-lg font-medium">
-                            {contributions?.totalContributions.toLocaleString()}개
+                            {contributions?.totalContributions.toLocaleString()}
+                            <span className="text-sm text-muted-foreground ml-1">contributions</span>
                         </span>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                    <Tabs
-                        defaultValue="year"
-                        value={viewType}
-                        className="w-[200px]"
-                        onValueChange={(value) => {
-                            setViewType(value as 'year' | 'month');
-                            if (value === 'year') setSelectedMonth('');
-                        }}
-                    >
-                        <TabsList className="grid w-full grid-cols-2">
-                            <TabsTrigger value="year">연간</TabsTrigger>
-                            <TabsTrigger value="month">월간</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
+                <Separator className="my-4" />
 
-                    <div className="flex gap-2">
+                {/* Controls Section */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex-1 min-w-[200px]">
+                        <Tabs
+                            defaultValue="year"
+                            value={viewType}
+                            onValueChange={(value) => {
+                                setViewType(value as 'year' | 'month');
+                                if (value === 'year') {
+                                    setSelectedMonth('');
+                                } else {
+                                    // 월간 보기로 전환할 때
+                                    if (selectedYear === currentYear) {
+                                        // 현재 연도를 보고 있다면 현재 월을 선택
+                                        setSelectedMonth(currentMonth);
+                                    } else {
+                                        // 다른 연도를 보고 있다면 1월을 선택
+                                        setSelectedMonth('01');
+                                    }
+                                }
+                            }}
+                        >
+                            <TabsList className="grid w-full grid-cols-2">
+                                <TabsTrigger value="year" className="flex items-center gap-2">
+                                    연간 보기
+                                </TabsTrigger>
+                                <TabsTrigger value="month" className="flex items-center gap-2">
+                                    월간 보기
+                                </TabsTrigger>
+                            </TabsList>
+                        </Tabs>
+                    </div>
+
+                    <div className="flex flex-wrap sm:flex-nowrap items-center gap-2">
                         <Select value={selectedYear} onValueChange={setSelectedYear}>
-                            <SelectTrigger className="w-[120px]">
-                                <SelectValue placeholder="년도 선택" />
+                            <SelectTrigger className="w-full sm:w-[130px]">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-muted-foreground">연도</span>
+                                    <SelectValue placeholder="Select year" />
+                                </div>
                             </SelectTrigger>
                             <SelectContent>
                                 {getAvailableYears().map((year) => (
@@ -281,8 +314,11 @@ const ContributionGraph: React.FC<ContributionGraphProps> = ({ accessToken }) =>
 
                         {viewType === 'month' && (
                             <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                                <SelectTrigger className="w-[120px]">
-                                    <SelectValue placeholder="월 선택" />
+                                <SelectTrigger className="w-full sm:w-[130px]">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-muted-foreground">월</span>
+                                        <SelectValue placeholder="Select month" />
+                                    </div>
                                 </SelectTrigger>
                                 <SelectContent>
                                     {getMonthsForYear(selectedYear).map((month) => (
