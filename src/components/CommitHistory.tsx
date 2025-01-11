@@ -38,17 +38,12 @@ const CommitHistory = ({ accessToken }: CommitHistoryProps) => {
         const fetchCommits = async () => {
             try {
                 const octokit = new Octokit({ auth: accessToken });
-
-                // Get authenticated user
                 const { data: user } = await octokit.users.getAuthenticated();
-
-                // Fetch commits
                 const { data: commitsData } = await octokit.repos.listCommits({
                     owner: user.login,
                     repo: 'lawn-diary',
                     per_page: 10,
                 });
-
                 setCommits(commitsData);
                 setLoading(false);
             } catch (err) {
@@ -98,69 +93,73 @@ const CommitHistory = ({ accessToken }: CommitHistoryProps) => {
                         최근 커밋 히스토리
                     </CardTitle>
                 </CardHeader>
-                <CardContent>
-                    <ScrollArea className="max-h-[400px] pr-4">
-                        <motion.div
-                            variants={container}
-                            initial="hidden"
-                            animate="show"
-                            className="space-y-4"
-                        >
-                            {loading ? (
-                                Array.from({ length: 5 }).map((_, index) => (
-                                    <div key={index} className="flex gap-4">
-                                        <Skeleton className="h-12 w-12 rounded-full" />
-                                        <div className="space-y-2 flex-1">
-                                            <Skeleton className="h-4 w-[250px]" />
-                                            <Skeleton className="h-4 w-[200px]" />
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                commits.map((commit) => (
-                                    <motion.div
-                                        key={commit.sha}
-                                        variants={item}
-                                        className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
-                                        onClick={() => setSelectedCommit(commit.sha)}
-                                    >
-                                        <div className="bg-emerald-500/10 p-2 rounded-full">
-                                            <FileText className="h-6 w-6 text-emerald-500" />
-                                        </div>
-                                        <div className="flex-1 space-y-1">
-                                            <p className="font-medium break-all">
-                                                {commit.commit.message}
-                                            </p>
-                                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                                {commit.commit.author?.date && (
-                                                    <>
-                                                        <span className="flex items-center gap-1">
-                                                            <CalendarDays className="h-4 w-4" />
-                                                            {format(new Date(commit.commit.author.date), 'yyyy-MM-dd')}
-                                                        </span>
-                                                        <span className="flex items-center gap-1">
-                                                            <Clock className="h-4 w-4" />
-                                                            {format(new Date(commit.commit.author.date), 'HH:mm')}
-                                                        </span>
-                                                    </>
-                                                )}
-                                                {commit.author && (
-                                                    <div className="flex items-center gap-2">
-                                                        <img
-                                                            src={commit.author.avatar_url}
-                                                            alt={commit.author.login}
-                                                            className="w-5 h-5 rounded-full"
-                                                        />
-                                                        <span>{commit.author.login}</span>
-                                                    </div>
-                                                )}
+                <CardContent className="p-0"> {/* Remove default padding */}
+                    <div className="h-[400px] relative"> {/* Fixed height container */}
+                        <ScrollArea className="h-full">
+                            <div className="p-6"> {/* Add padding inside scroll area */}
+                                <motion.div
+                                    variants={container}
+                                    initial="hidden"
+                                    animate="show"
+                                    className="space-y-4"
+                                >
+                                    {loading ? (
+                                        Array.from({ length: 5 }).map((_, index) => (
+                                            <div key={index} className="flex gap-4">
+                                                <Skeleton className="h-12 w-12 rounded-full" />
+                                                <div className="space-y-2 flex-1">
+                                                    <Skeleton className="h-4 w-[250px]" />
+                                                    <Skeleton className="h-4 w-[200px]" />
+                                                </div>
                                             </div>
-                                        </div>
-                                    </motion.div>
-                                ))
-                            )}
-                        </motion.div>
-                    </ScrollArea>
+                                        ))
+                                    ) : (
+                                        commits.map((commit) => (
+                                            <motion.div
+                                                key={commit.sha}
+                                                variants={item}
+                                                className="flex items-start gap-4 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
+                                                onClick={() => setSelectedCommit(commit.sha)}
+                                            >
+                                                <div className="bg-emerald-500/10 p-2 rounded-full">
+                                                    <FileText className="h-6 w-6 text-emerald-500" />
+                                                </div>
+                                                <div className="flex-1 min-w-0 space-y-1"> {/* Add min-width: 0 */}
+                                                    <p className="font-medium break-all">
+                                                        {commit.commit.message}
+                                                    </p>
+                                                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                                                        {commit.commit.author?.date && (
+                                                            <>
+                                                                <span className="flex items-center gap-1">
+                                                                    <CalendarDays className="h-4 w-4" />
+                                                                    {format(new Date(commit.commit.author.date), 'yyyy-MM-dd')}
+                                                                </span>
+                                                                <span className="flex items-center gap-1">
+                                                                    <Clock className="h-4 w-4" />
+                                                                    {format(new Date(commit.commit.author.date), 'HH:mm')}
+                                                                </span>
+                                                            </>
+                                                        )}
+                                                        {commit.author && (
+                                                            <div className="flex items-center gap-2">
+                                                                <img
+                                                                    src={commit.author.avatar_url}
+                                                                    alt={commit.author.login}
+                                                                    className="w-5 h-5 rounded-full"
+                                                                />
+                                                                <span>{commit.author.login}</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        ))
+                                    )}
+                                </motion.div>
+                            </div>
+                        </ScrollArea>
+                    </div>
                 </CardContent>
             </Card>
 
