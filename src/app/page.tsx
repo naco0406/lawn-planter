@@ -13,6 +13,7 @@ import CreateRepoModal from '@/components/CreateRepoModal'
 import ContributionGraph from '@/components/ContributionGraph'
 import CommitHistory from '@/components/CommitHistory'
 import { checkRepository, createRepository } from '@/lib/github'
+import Header from '@/components/Header'
 
 export default function Home() {
   const { data: session, status, update } = useSession()
@@ -133,104 +134,96 @@ export default function Home() {
     </motion.div>
   )
 
-  const Header = () => (
-    <div className="flex justify-between items-center mb-8 max-w-5xl mx-auto">
-      <div className="flex items-center gap-2">
-        <Github className="h-8 w-8" />
-        <h1 className="text-3xl font-bold">Github 잔디 심기</h1>
-      </div>
-      {status !== 'loading' && <AuthButton />}
-    </div>
-  )
-
   return (
-    <main className="min-h-screen bg-gradient-to-b from-background to-muted p-8">
+    <main className="min-h-screen bg-gradient-to-b from-background to-muted">
       <Header />
 
-      {status === 'loading' || (status === 'authenticated' && !session?.accessToken) ? (
-        <LoadingState />
-      ) : !session ? (
-        <WelcomeState />
-      ) : (
-        <div className="max-w-5xl mx-auto space-y-8">
-          {session.accessToken && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Card className="overflow-hidden">
-                <CardContent className="p-0">
-                  <ContributionGraph accessToken={session.accessToken} />
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
+      <div className="py-8 px-4">
+        {status === 'loading' || (status === 'authenticated' && !session?.accessToken) ? (
+          <LoadingState />
+        ) : !session ? (
+          <WelcomeState />
+        ) : (
+          <div className="max-w-5xl mx-auto space-y-8">
+            {session.accessToken && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Card className="overflow-hidden">
+                  <CardContent className="p-0">
+                    <ContributionGraph accessToken={session.accessToken} />
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
 
-          {hasRepo === false && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>저장소 생성 필요</AlertTitle>
-                <AlertDescription>
-                  <p className="mb-4">일기를 저장할 lawn-diary 저장소가 필요합니다 🌱</p>
-                  <Button
-                    onClick={() => setShowModal(true)}
-                    className="bg-emerald-600 hover:bg-emerald-700"
-                  >
-                    저장소 생성하기
-                  </Button>
-                </AlertDescription>
-              </Alert>
-            </motion.div>
-          )}
+            {hasRepo === false && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>저장소 생성 필요</AlertTitle>
+                  <AlertDescription>
+                    <p className="mb-4">일기를 저장할 lawn-diary 저장소가 필요합니다 🌱</p>
+                    <Button
+                      onClick={() => setShowModal(true)}
+                      className="bg-emerald-600 hover:bg-emerald-700"
+                    >
+                      저장소 생성하기
+                    </Button>
+                  </AlertDescription>
+                </Alert>
+              </motion.div>
+            )}
 
-          {hasRepo && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <Card className="hover:shadow-lg transition-all duration-300">
-                <Link href="/diary">
-                  <CardHeader>
-                    <div className="flex items-center gap-2">
-                      <BookOpenCheck className="h-5 w-5 text-emerald-500" />
-                      <CardTitle>
-                        <div className="mb-2">오늘의 일기 쓰기 🌱</div>
-                      </CardTitle>
-                    </div>
-                    <Separator className="my-2" />
-                    <CardDescription>
-                      마크다운으로 일기를 작성하고 Github에 커밋하세요
-                    </CardDescription>
-                  </CardHeader>
-                </Link>
-              </Card>
-            </motion.div>
-          )}
+            {hasRepo && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <Card className="hover:shadow-lg transition-all duration-300">
+                  <Link href="/diary">
+                    <CardHeader>
+                      <div className="flex items-center gap-2">
+                        <BookOpenCheck className="h-5 w-5 text-emerald-500" />
+                        <CardTitle>
+                          <div className="mb-2">오늘의 일기 쓰기 🌱</div>
+                        </CardTitle>
+                      </div>
+                      <Separator className="my-2" />
+                      <CardDescription>
+                        마크다운으로 일기를 작성하고 Github에 커밋하세요
+                      </CardDescription>
+                    </CardHeader>
+                  </Link>
+                </Card>
+              </motion.div>
+            )}
 
-          {session.accessToken && hasRepo && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <CommitHistory accessToken={session.accessToken} />
-            </motion.div>
-          )}
-        </div>
-      )}
+            {session.accessToken && hasRepo && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <CommitHistory accessToken={session.accessToken} />
+              </motion.div>
+            )}
+          </div>
+        )}
 
-      <CreateRepoModal
-        isOpen={showModal}
-        onConfirm={handleCreateRepo}
-        onOpenChange={() => setShowModal(false)}
-      />
+        <CreateRepoModal
+          isOpen={showModal}
+          onConfirm={handleCreateRepo}
+          onOpenChange={() => setShowModal(false)}
+        />
+      </div>
     </main>
   )
 }
