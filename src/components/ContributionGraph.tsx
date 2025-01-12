@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { Octokit } from '@octokit/rest';
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Octokit } from '@octokit/rest';
 import { BarChart3, Calendar } from "lucide-react";
+import { FC, useEffect, useState } from 'react';
 import type {
-    ContributionGraphProps,
-    GitHubGraphQLResponse,
     ContributionCalendar,
     ContributionDay,
+    ContributionGraphProps,
     ContributionWeek,
-    GitHubAPIError
+    GitHubAPIError,
+    GitHubGraphQLResponse
 } from '../types/github';
 import { Separator } from './ui/separator';
 
-const ContributionGraph: React.FC<ContributionGraphProps> = ({ accessToken }) => {
+export const ContributionGraph: FC<ContributionGraphProps> = ({ accessToken }) => {
     // 현재 날짜 정보를 동적으로 가져오기
     const currentDate = new Date();
     const [selectedYear, setSelectedYear] = useState<string>(currentDate.getFullYear().toString());
@@ -406,5 +406,3 @@ const ContributionGraph: React.FC<ContributionGraphProps> = ({ accessToken }) =>
         </Card>
     );
 };
-
-export default ContributionGraph;

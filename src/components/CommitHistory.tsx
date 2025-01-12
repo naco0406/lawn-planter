@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { GitCommit, Clock, FileText, CalendarDays } from "lucide-react";
-import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
-import { format } from "date-fns";
 import { Octokit } from '@octokit/rest';
-import CommitPreviewModal from './CommitPreviewModal';
+import { format } from "date-fns";
+import { motion } from "framer-motion";
+import { CalendarDays, Clock, FileText, GitCommit } from "lucide-react";
+import { FC, useEffect, useState } from 'react';
+import { CommitPreviewModal } from "./CommitPreviewModal";
 
 interface Commit {
     sha: string;
@@ -24,11 +24,11 @@ interface Commit {
     } | null;
 }
 
-interface CommitHistoryProps {
+interface Props {
     accessToken: string;
 }
 
-const CommitHistory = ({ accessToken }: CommitHistoryProps) => {
+export const CommitHistory: FC<Props> = ({ accessToken }) => {
     const [commits, setCommits] = useState<Commit[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -172,5 +172,3 @@ const CommitHistory = ({ accessToken }: CommitHistoryProps) => {
         </>
     );
 };
-
-export default CommitHistory;

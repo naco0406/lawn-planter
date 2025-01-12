@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Github } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import AuthButton from '@/components/AuthButton';
 import { cn } from '@/lib/utils';
 import { useSession } from 'next-auth/react';
+import { AuthButton } from './AuthButton';
 
-const Header = () => {
+export const Header: FC = () => {
     const pathname = usePathname();
     const { data: session } = useSession();
 
@@ -79,5 +79,3 @@ const Header = () => {
         </header>
     );
 };
-
-export default Header;

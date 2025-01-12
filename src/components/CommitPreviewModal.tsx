@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -7,7 +7,7 @@ import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Octokit } from '@octokit/rest';
 
-interface CommitPreviewModalProps {
+interface Props {
   isOpen: boolean;
   onClose: () => void;
   accessToken: string;
@@ -15,13 +15,13 @@ interface CommitPreviewModalProps {
   fileName?: string;
 }
 
-const CommitPreviewModal = ({ 
-  isOpen, 
-  onClose, 
-  accessToken, 
+export const CommitPreviewModal: FC<Props> = ({
+  isOpen,
+  onClose,
+  accessToken,
   sha,
-  fileName 
-}: CommitPreviewModalProps) => {
+  fileName
+}) => {
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,16 +29,16 @@ const CommitPreviewModal = ({
   useEffect(() => {
     const fetchCommitContent = async () => {
       if (!isOpen || !sha) return;
-      
+
       setLoading(true);
       setError(null);
-      
+
       try {
         const octokit = new Octokit({ auth: accessToken });
-        
+
         // Get authenticated user
         const { data: user } = await octokit.users.getAuthenticated();
-        
+
         // Get commit details to find the file
         const { data: commitData } = await octokit.repos.getCommit({
           owner: user.login,
@@ -48,7 +48,7 @@ const CommitPreviewModal = ({
 
         // Find the markdown file in the commit
         const mdFile = commitData.files?.find(file => file.filename.endsWith('.md'));
-        
+
         if (!mdFile) {
           setError('이 커밋에서 마크다운 파일을 찾을 수 없습니다.');
           setLoading(false);
@@ -94,7 +94,7 @@ const CommitPreviewModal = ({
             {fileName || '커밋 미리보기'}
           </DialogTitle>
         </DialogHeader>
-        
+
         <div className="flex-1 min-h-0 mt-4">
           <ScrollArea className="h-full relative">
             {loading ? (
@@ -121,5 +121,3 @@ const CommitPreviewModal = ({
     </Dialog>
   );
 };
-
-export default CommitPreviewModal;

@@ -1,19 +1,18 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { CommitHistory } from '@/components/CommitHistory'
+import { ContributionGraph } from '@/components/ContributionGraph'
+import { CreateRepoModal } from '@/components/CreateRepoModal'
+import { Header } from '@/components/Header'
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+import { checkRepository, createRepository } from '@/lib/github'
+import { motion } from "framer-motion"
+import { AlertCircle, BookOpenCheck, Loader2, Sprout } from "lucide-react"
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { motion } from "framer-motion"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Separator } from "@/components/ui/separator"
-import { Github, BookOpenCheck, AlertCircle, Loader2, Sprout } from "lucide-react"
-import AuthButton from '@/components/AuthButton'
-import CreateRepoModal from '@/components/CreateRepoModal'
-import ContributionGraph from '@/components/ContributionGraph'
-import CommitHistory from '@/components/CommitHistory'
-import { checkRepository, createRepository } from '@/lib/github'
-import Header from '@/components/Header'
+import { useEffect, useState } from 'react'
 
 export default function Home() {
   const { data: session, status, update } = useSession()
@@ -126,9 +125,6 @@ export default function Home() {
               </CardHeader>
             </Card>
           </div>
-          {/* <div className="flex justify-center pt-4">
-            <AuthButton />
-          </div> */}
         </CardContent>
       </Card>
     </motion.div>

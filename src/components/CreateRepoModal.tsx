@@ -1,24 +1,24 @@
 'use client'
 
-import { useState } from 'react'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { AlertCircle } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { AlertCircle } from 'lucide-react'
+import { FC, useState } from 'react'
 
-interface CreateRepoModalProps {
+interface Props {
   isOpen: boolean
   onOpenChange: (open: boolean) => void
   onConfirm: () => void
 }
 
-export default function CreateRepoModal({ 
-  isOpen, 
+export const CreateRepoModal: FC<Props> = ({
+  isOpen,
   onOpenChange,
-  onConfirm 
-}: CreateRepoModalProps) {
+  onConfirm
+}) => {
   const [repoName, setRepoName] = useState('lawn-diary')
   const [isLoading, setIsLoading] = useState(false)
 

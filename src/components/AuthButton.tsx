@@ -1,7 +1,6 @@
 'use client'
 
-import { useSession, signIn, signOut } from 'next-auth/react'
-import { Github, LogOut, Loader2 } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -11,10 +10,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Github, LogOut } from 'lucide-react'
+import { signIn, signOut, useSession } from 'next-auth/react'
+import { FC } from 'react'
 
-export default function AuthButton() {
+export const AuthButton: FC = () => {
     const { data: session, status } = useSession()
 
     if (status === 'loading') {

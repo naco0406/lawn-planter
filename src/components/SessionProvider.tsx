@@ -7,11 +7,7 @@ export default function SessionProvider({ children, session }: {
     session: any;
 }) {
     return (
-        <Provider session={session}
-            // refetchInterval={0} // 자동 갱신 비활성화
-            // refetchWhenOffline={false} // 오프라인일 때 갱신 시도 안 함
-            // refetchOnWindowFocus={false}
-        >
+        <Provider session={session}>
             {children}
         </Provider>
     )
