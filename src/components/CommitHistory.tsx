@@ -96,7 +96,7 @@ export const CommitHistory: FC<Props> = ({ accessToken }) => {
                 <CardContent className="p-0"> {/* Remove default padding */}
                     <div className="h-[400px] relative"> {/* Fixed height container */}
                         <ScrollArea className="h-full">
-                            <div className="p-6"> {/* Add padding inside scroll area */}
+                            <div className="px-6 pb-6"> {/* Add padding inside scroll area */}
                                 <motion.div
                                     variants={container}
                                     initial="hidden"
