@@ -113,3 +113,14 @@ export async function commitFile(
         throw error;
     }
 }
+
+export async function getAuthenticatedUser(accessToken: string) {
+    const octokit = new Octokit({ auth: accessToken });
+    try {
+        const { data: user } = await octokit.users.getAuthenticated();
+        return user.login;
+    } catch (error) {
+        const apiError = error as GitHubAPIError;
+        throw new Error(`Failed to fetch user: ${apiError.message}`);
+    }
+}

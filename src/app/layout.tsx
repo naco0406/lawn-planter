@@ -1,9 +1,9 @@
-import './globals.css'
-import { Inter } from 'next/font/google'
-import { getServerSession } from 'next-auth'
-import SessionProvider from '@/components/SessionProvider'
-import { headers } from 'next/headers'
+import { Provider } from '@/components/Provider'
 import { authOptions } from '@/lib/auth'
+import { getServerSession } from 'next-auth'
+import { Inter } from 'next/font/google'
+import { headers } from 'next/headers'
+import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -42,9 +42,9 @@ export default async function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={inter.className}>
-        <SessionProvider session={session}>
+        <Provider session={session}>
           {children}
-        </SessionProvider>
+        </Provider>
       </body>
     </html>
   )
