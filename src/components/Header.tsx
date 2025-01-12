@@ -5,13 +5,16 @@ import { Github } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AuthButton from '@/components/AuthButton';
 import { cn } from '@/lib/utils';
+import { useSession } from 'next-auth/react';
 
 const Header = () => {
     const pathname = usePathname();
+    const { data: session } = useSession();
 
     const navigationItems = [
         { href: '/', label: '홈' },
-        { href: '/diary', label: '일기 작성' },
+        // 세션이 있을 때만 일기 작성 탭 표시
+        ...(session ? [{ href: '/diary', label: '일기 작성' }] : []),
     ];
 
     return (
