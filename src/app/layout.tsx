@@ -16,7 +16,7 @@ export const metadata = {
       { url: '/lawn_logo.png' },
     ],
   },
-  themeColor: '#ffffff',
+  themeColor: '#6EE7B7',
 }
 
 export default async function RootLayout({
@@ -36,7 +36,7 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-title" content="Lawn Diary" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#6EE7B7" />
 
         <link rel="apple-touch-icon" href="/lawn_logo.png" />
         <link rel="manifest" href="/manifest.json" />

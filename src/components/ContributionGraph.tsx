@@ -337,10 +337,10 @@ export const ContributionGraph: FC<ContributionGraphProps> = ({ accessToken }) =
                 <div className="space-y-4">
                     <ScrollArea className="w-full rounded-lg">
                         <div className="min-w-[800px] mb-2">
-                            <div className="pt-4 px-10">
-                                <MonthLabels />
-                            </div>
-                            <div className="px-4">
+                            <div>
+                                <div className="pt-4 px-8">
+                                    <MonthLabels />
+                                </div>
                                 <div className="flex">
                                     {/* Weekday labels */}
                                     <div className="flex flex-col gap-[3px] text-xs text-muted-foreground mr-2 sticky left-0 z-10 bg-card py-2 pr-2">
@@ -352,7 +352,7 @@ export const ContributionGraph: FC<ContributionGraphProps> = ({ accessToken }) =
                                     </div>
 
                                     {/* Contribution grid */}
-                                    <div className="flex gap-[3px] overflow-x-auto py-2">
+                                    <div className="flex gap-[3px] overflow-x-auto p-2">
                                         {filledGrid.map((week, weekIndex) => (
                                             <div key={weekIndex} className="flex flex-col gap-[3px]">
                                                 {week.contributionDays.map((day) => (
@@ -369,7 +369,7 @@ export const ContributionGraph: FC<ContributionGraphProps> = ({ accessToken }) =
                                                                 <div className="space-y-2">
                                                                     <p className="text-sm font-semibold">{formatDate(day.date)}</p>
                                                                     <p className="text-sm">
-                                                                        {day.contributionCount}개의 contribution
+                                                                        Contribution : {day.contributionCount}개
                                                                     </p>
                                                                 </div>
                                                             </HoverCardContent>
