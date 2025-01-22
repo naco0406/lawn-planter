@@ -4,6 +4,13 @@ import { getServerSession } from 'next-auth'
 import { Inter } from 'next/font/google'
 import { headers } from 'next/headers'
 import './globals.css'
+import { useNotification } from '@/hooks/useNotification'
+
+'use client';
+const NotificationInitializer = () => {
+  useNotification();
+  return null;
+};
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -43,6 +50,7 @@ export default async function RootLayout({
       </head>
       <body className={inter.className}>
         <Provider session={session}>
+          <NotificationInitializer />
           {children}
         </Provider>
       </body>
